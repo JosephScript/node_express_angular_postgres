@@ -21,23 +21,26 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.submitTalent = function() {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
-        $scope.talent = response.data;
-        // go get all their talents (except last)
-        for (var i = 0; i < $scope.talents.length; i++) {
-          $http.get('/join/' + $scope.talents[i].talent_id)
-            .then(function(response) {
-              $scope.talents[i].skills.push();
-            });
-        }
+        $scope.talents = response.data;
+        // go get all their talents (except last one)
+        $scope.talents.forEach(function(elem) {
+          if (elem.talent_id !== $scope.talents[$scope.talents.length - 1].talent_id) {
+            $http.get('/join/' + elem.talent_id)
+              .then(function(response) {
+                elem.skills = response.data;
+              });
+          }
+        });
 
         // initialize the last one with an empty array
-        $scope.talents[i].skills = [];
+        $scope.talents[$scope.talents.length - 1].skills = [];
         // still need to add talents for last one
         $scope.talentForm.skills.forEach(function(elem) {
           // $scope.talent.length will be the ID of the last inserted element
-          $http.post('/join/' + $scope.talent.length + '/' + elem)
+          $http.post('/join/' + $scope.talents.length + '/' + elem)
             .then(function(response) {
-              $scope.talents[i].skills.push(response.data);
+              $scope.talents[$scope.talents.length - 1]
+              .skills.push(response.data);
 
             });
         });

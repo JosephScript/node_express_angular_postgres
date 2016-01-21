@@ -25,6 +25,10 @@ router.post('/:talentId/:skillsId', function(req, res) {
             'SELECT * from skills where skills_id = $1 LIMIT 1;',
           [req.params.skillsId]);
 
+          // Stream results back one row at a time
+          query.on('row', function(row) {
+            results.push(row);
+          });
           // After all data is returned, close connection and return results
           query.on('end', function() {
             client.end();
