@@ -22,9 +22,24 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
         $scope.talent = response.data;
+        // go get all their talents (except last)
+        for (var i = 0; i < $scope.talents.length; i++) {
+          $http.get('/join/' + $scope.talents[i].talent_id)
+            .then(function(response) {
+              $scope.talents[i].skills.push();
+            });
+        }
+
+        // initialize the last one with an empty array
+        $scope.talents[i].skills = [];
+        // still need to add talents for last one
         $scope.talentForm.skills.forEach(function(elem) {
           // $scope.talent.length will be the ID of the last inserted element
-          $http.post('/join/' + $scope.talent.length + '/' + elem);
+          $http.post('/join/' + $scope.talent.length + '/' + elem)
+            .then(function(response) {
+              $scope.talents[i].skills.push(response.data);
+
+            });
         });
       });
   };
@@ -40,7 +55,6 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     $scope.talents.forEach(function(elem) {
       $http.get('/join/' + elem.talent_id)
         .then(function(response) {
-          console.log(response);
           elem.skills = response.data;
         });
     });

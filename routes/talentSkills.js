@@ -9,20 +9,29 @@ router.post('/:talentId/:skillsId', function(req, res) {
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
 
-    // SQL Query > Select Data
-    var query = client.query('INSERT INTO talent_skills(talent_id, skills_id) ' +
-    'values($1, $2);', [req.params.talentId, req.params.skillsId]);
+    // SQL Query > Insert Data
+    client.query('INSERT INTO talent_skills(talent_id, skills_id) ' +
+    'values($1, $2)', [req.params.talentId, req.params.skillsId],
+        function(err, result) {
 
-    // After all data is returned, close connection and return results
-    query.on('end', function() {
-      client.end();
-      return res.json(results);
-    });
+          done();
+          // Handle Errors
+          if(err) {
+            console.log(err);
+          }
 
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
+          // SQL Query > Select Data
+          var query = client.query(
+            'SELECT * from skills where skills_id = $1 LIMIT 1;',
+          [req.params.skillsId]);
+
+          // After all data is returned, close connection and return results
+          query.on('end', function() {
+            client.end();
+            return res.json(results);
+          });
+
+        });
   });
 });
 

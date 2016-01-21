@@ -26,6 +26,10 @@ router.post('/', function(req, res) {
     function(err, result) {
 
       done();
+      // Handle Errors
+      if(err) {
+        console.log(err);
+      }
 
       // SQL Query > Select Data
       var query = client.query('SELECT * FROM talent ORDER BY talent_id ASC;');
@@ -41,10 +45,6 @@ router.post('/', function(req, res) {
       return res.json(results);
     });
 
-      // Handle Errors
-      if(err) {
-        console.log(err);
-      }
     });
 
   });
