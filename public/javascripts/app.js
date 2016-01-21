@@ -36,11 +36,13 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
         $scope.talents[$scope.talents.length - 1].skills = [];
         // still need to add talents for last one
         $scope.talentForm.skills.forEach(function(elem) {
-          // $scope.talent.length will be the ID of the last inserted element
+          // $scope.talent.length -1 will be the ID of the last talent (just added)
           $http.post('/join/' + $scope.talents.length + '/' + elem)
             .then(function(response) {
+              console.log($scope.talents);
               $scope.talents[$scope.talents.length - 1]
               .skills.push(response.data);
+              console.log($scope.talents);
 
             });
         });

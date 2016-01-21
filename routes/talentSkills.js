@@ -45,7 +45,7 @@ router.get('/:talentId', function(req, res) {
   pg.connect(connectionString, function(err, client, done) {
 
     // SQL Query > Select Data
-    var query = client.query('SELECT name FROM skills ' +
+    var query = client.query('SELECT * FROM skills ' +
     'join talent_skills ON skills.skills_id = talent_skills.skills_id ' +
     'join talent ON talent.talent_id = talent_skills.talent_id ' +
     'WHERE talent.talent_id = $1;', [req.params.talentId]);
