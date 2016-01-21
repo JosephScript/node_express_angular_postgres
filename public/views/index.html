@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html ng-app="myApp">
+<head lang="en">
+    <meta charset="UTF-8">
+    <title>Postgres Example Application</title>
+    <!--STYLES-->
+    <!-- <link rel="stylesheet" href="/styles/style.css"> -->
+
+</head>
+<body  ng-controller="mainCtrl">
+  <button ng-click="toggleTalentForm()">{{showTalentForm ? "Hide talent form" : "Add talent"}}</button>
+  <form ng-if="showTalentForm" ng-submit="submitTalent()">
+    <label for="firstname">First Name:</label>
+    <input type="text" id="firstname" name="firstname" ng-model="talentForm.firstname" />
+
+    <label for="lastname">Last Name:</label>
+    <input type="text" id="lastname" name="lastname" ng-model="talentForm.lastname" />
+
+    <label for="phone">Phone Number:</label>
+    <input type="text" id="phone" name="phone" ng-model="talentForm.phone" />
+
+    <label for="low">Low Range:</label>
+    <input type="number" id="low" name="low" ng-model="talentForm.low" />
+
+    <label for="high">High Range:</label>
+    <input type="number" id="high" name="high" ng-model="talentForm.high" />
+
+    <ul>
+      <li ng-repeat="skill in skills">
+        <label for="{{skill.skills_id}}">{{skill.name}} </label>
+        <input type="checkbox"
+          id="{{skill.skills_id}}"
+          checklist-model="talentForm.skills"
+          checklist-value="skill.skills_id">
+      </li>
+    </ul>
+    <button>Submit</button>
+  </form>
+  <button ng-click="toggleSkillForm()">{{showSkillForm ? "Hide skill form" : "Add skill"}}</button>
+  <form ng-if="showSkillForm" ng-submit="submitSkill()">
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" ng-model="skillForm.name" />
+      <button>Submit</button>
+  </form>
+  <ul>
+    <li ng-repeat="talent in talents">
+      {{talent.last_name}}, {{talent.first_name}}
+      <ul>
+        <li ng-repeat="skill in talent.skills">
+          <label for="{{skill.skills_id}}">{{skill.name}} </label>
+        </li>
+      </ul>
+    </li>
+  </ul>
+
+    <!--SCRIPTS-->
+    <script type="text/javascript" src="/vendor/angular.min.js"></script>
+    <script type="text/javascript" src="/vendor/checklist-model.js"></script>
+    <script type="text/javascript" src="/javascripts/app.js"></script>
+</body>
+</html>
