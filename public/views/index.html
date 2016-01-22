@@ -41,8 +41,8 @@
             <td>{{talent.low_range}}</td>
             <td>
               <span ng-repeat="skill in talent.skills">
-              {{skill.name}}
-            </span>
+                {{skill.name}}
+              </span>
             </td>
           </tr>
         </tbody>
@@ -68,39 +68,43 @@
           <label for="high">High Range:</label>
           <input type="number" id="high" name="high" ng-model="talentForm.high" min="0" max="2147483647" required/>
 
-            <div ng-repeat="skill in skills">
-              <label for="{{skill.skills_id}}">{{skill.name}}
+          <div ng-repeat="skill in skills">
+            <label for="{{skill.skills_id}}">{{skill.name}}
               <input type="checkbox"
               id="{{skill.skills_id}}"
               checklist-model="talentForm.skills"
               checklist-value="skill.skills_id">
-               </label>
-            </div>
+            </label>
+          </div>
 
           <button type="submit" class="button button-primary">Submit</button>
         </form>
       </div>
       <div class="six columns">
         <button ng-click="toggleSkillForm()">{{showSkillForm ? "Hide skill form" : "Manage skills"}}</button>
-        <form ng-if="showSkillForm" ng-submit="submitSkill()">
-        <h2>Skills in the database:</h2>
-        <ul>
-          <li ng-repeat="skill in skills">
-            {{skill.name}}
-            <a href class="delete" ng-click="deleteSkill(skill.skills_id)">X</a>
-        </li>
-        </ul>
-          <label for="name">Name:</label>
-          <input class="u-full-width" type="text" id="name" name="name" ng-model="skillForm.name" required/>
-          <button type="submit" class="button button-primary">Submit</button>
-        </form>
+        <div ng-if="showSkillForm">
+          <span>Skills in the database:</span>
+          <ul>
+            <li ng-repeat="skill in skills">
+              {{skill.name}}
+              <a href class="delete" ng-click="deleteSkill(skill.skills_id)">X</a>
+            </li>
+          </ul>
+          <form  ng-submit="submitSkill()">
+            <legend>Add another Skill</legend>
+            <label for="name">Name:</label>
+
+            <input class="u-full-width" type="text" id="name" name="name" ng-model="skillForm.name" required/>
+            <button type="submit" class="button button-primary">Submit</button>
+          </form>
+        </div>
       </div>
     </div>
   </div>
 
-    <!--SCRIPTS-->
-    <script type="text/javascript" src="/vendor/angular.min.js"></script>
-    <script type="text/javascript" src="/vendor/checklist-model.js"></script>
-    <script type="text/javascript" src="/javascripts/app.js"></script>
-  </body>
-  </html>
+  <!--SCRIPTS-->
+  <script type="text/javascript" src="/vendor/angular.min.js"></script>
+  <script type="text/javascript" src="/vendor/checklist-model.js"></script>
+  <script type="text/javascript" src="/javascripts/app.js"></script>
+</body>
+</html>
