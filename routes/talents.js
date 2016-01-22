@@ -88,7 +88,13 @@ router.put('/:talentId', function(req, res) {
   var id = req.params.talentId;
 
   // Grab data from http request
-  var data = {text: req.body.firstname};
+  var data = {
+    firstname: req.body.firstname,
+    lastname: req.body.lastname,
+    phone: req.body.phone,
+    low: req.body.low,
+    high: req.body.high
+  };
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
@@ -99,8 +105,10 @@ router.put('/:talentId', function(req, res) {
     }
 
     // SQL Query > Update Data
-    client.query('UPDATE talent SET firstname=($1) WHERE talent_id=($2)',
-      [data.firstname, id]);
+    client.query('UPDATE talent SET ' +
+    'first_name=($1) last_name=($2) phone=($3) low_range=($4) high_range=($5) ' +
+    'WHERE talent_id=($6);',
+    [data.firstname, data.lastname, data.phone, data.low, data.high, id]);
 
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM talent ORDER BY talent_id ASC');
