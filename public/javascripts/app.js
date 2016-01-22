@@ -16,36 +16,36 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     $http.post('/skills', $scope.skillForm)
       .then(function(response) {
         $scope.skills = response.data;
+        $scope.skillForm = {};
       });
   };
   $scope.submitTalent = function() {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
-        $scope.talents = response.data;
+        // add a skills array to the result
+        response.data.skills = [];
 
-        // go get all their talents (except last one)
-        var lastIndex = $scope.talents.length - 1;
-        $scope.talents.forEach(function(elem) {
-          if (elem.talent_id !== $scope.talents[lastIndex].talent_id) {
-            $http.get('/join/' + elem.talent_id)
-              .then(function(response) {
-                elem.skills = response.data;
-              });
-          }
-        });
+        // push the response to the array
+        // Note:  Objects and arrays are pushed by reference
+        // so updating response.data updates $scope.talents last entry
+        $scope.talents.push(response.data);
 
-        // initialize the last one with an empty array
-        $scope.talents[$scope.talents.length - 1].skills = [];
-        // still need to add talents for last one
-        $scope.talentForm.skills.forEach(function(elem) {
+        // Copy the skills so we can add them async, and still clear the form ok
+        var skillsToAdd = angular.copy($scope.talentForm.skills);
+
+        // clear the form
+        $scope.talentForm = {
+          skills: []
+        };
+
+        // Now, go add the skills!
+        skillsToAdd.forEach(function(elem) {
           // $scope.talent.length -1 will be the ID of the last talent (just added)
-          $http.post('/join/' + $scope.talents.length + '/' + elem)
+          $http.post('/join/' + response.data.talent_id + '/' + elem)
             .then(function(response) {
-              console.log($scope.talents);
-              $scope.talents[$scope.talents.length - 1]
-              .skills.push(response.data);
-              console.log($scope.talents);
 
+              // go add the result to the talent
+              response.data.skills.push(response.data);
             });
         });
       });

@@ -8,7 +8,7 @@ var connectionString = process.env.DATABASE_URL ||
 * Creates a new talent, and returns all talents
 */
 router.post('/', function(req, res) {
-  var results = [];
+  var result = {};
 
   // Grab data from http request
   var data = {
@@ -22,36 +22,28 @@ router.post('/', function(req, res) {
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
 
-    // SQL Query > Insert Data
-    client.query('INSERT INTO talent' +
-    '(first_name, last_name, phone, low_range, high_range) ' +
-    'values($1, $2, $3, $4, $5) returning talent_id',
-    [data.firstname, data.lastname, data.phone, data.low, data.high],
-    function(err, result) {
-
-      done();
       // Handle Errors
       if(err) {
         console.log(err);
       }
 
-      // SQL Query > Select Data
-      var query = client.query('SELECT * FROM talent ORDER BY talent_id ASC;');
+      // SQL Query Insert data, then select data
+      var query = client.query('INSERT INTO talent' +
+      '(first_name, last_name, phone, low_range, high_range) ' +
+      'values($1, $2, $3, $4, $5) RETURNING *;',
+      [data.firstname, data.lastname, data.phone, data.low, data.high]);
 
       // Stream results back one row at a time
       query.on('row', function(row) {
-        results.push(row);
+        result = row;
       });
 
       // After all data is returned, close connection and return results
       query.on('end', function() {
-      client.end();
-      return res.json(results);
+        client.end();
+        return res.json(result);
+      });
     });
-
-    });
-
-  });
 });
 
 /**
