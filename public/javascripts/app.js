@@ -1,21 +1,20 @@
 var app = angular.module('myApp', ['checklist-model']);
 
 app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
-  // set up forms
-  $scope.skillForm = {};
-  $scope.talentForm = {
-    skills: []
-  };
 
   // set up repeaters
   $scope.skills = [];
   $scope.talents = [];
 
-  // hide/show forms
+  // hide/show and clear forms
   $scope.toggleTalentForm = function() {
+  $scope.talentForm = {
+    skills: []
+  };
     $scope.showTalentForm = !$scope.showTalentForm;
   };
   $scope.toggleSkillForm = function() {
+    $scope.skillForm = {};
     $scope.showSkillForm = !$scope.showSkillForm;
   };
 
