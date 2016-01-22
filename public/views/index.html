@@ -26,6 +26,7 @@
             <th>Phone</th>
             <th>Low Range</th>
             <th>High Range</th>
+            <th>Skills</th>
           </tr>
         </thead>
         <tbody>
@@ -33,8 +34,13 @@
             <td>{{talent.first_name}}</td>
             <td>{{talent.last_name}}</td>
             <td>{{talent.phone}}</td>
-            <td>{{talent.high}}</td>
-            <td>{{talent.low}}</td>
+            <td>{{talent.high_range}}</td>
+            <td>{{talent.low_range}}</td>
+            <td>
+              <span ng-repeat="skill in talent.skills">
+              {{skill.name}}
+            </span>
+            </td>
           </tr>
         </tbody>
       </table>
