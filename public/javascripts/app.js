@@ -1,16 +1,25 @@
 var app = angular.module('myApp', ['checklist-model']);
 
 app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
+  // set up forms
   $scope.skillForm = {};
   $scope.talentForm = {
     skills: []
   };
+
+  // set up repeaters
+  $scope.skills = [];
+  $scope.talents = [];
+
+// hide/show forms
   $scope.toggleTalentForm = function() {
     $scope.showTalentForm = !$scope.showTalentForm;
   };
   $scope.toggleSkillForm = function() {
     $scope.showSkillForm = !$scope.showSkillForm;
   };
+
+  // adds a skill
   $scope.submitSkill = function() {
     console.log($scope.skillForm);
     $http.post('/skills', $scope.skillForm)
@@ -19,6 +28,8 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
         $scope.skillForm = {};
       });
   };
+
+  // adds talent
   $scope.submitTalent = function() {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
@@ -53,12 +64,12 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
       });
   };
 
-  $scope.skills = [];
+  // get repeater info
   $http.get('/skills').then(function(response) {
       $scope.skills = response.data;
     });
 
-  $scope.talents = [];
+    // get repeater info
   $http.get('/talents').then(function(response) {
     $scope.talents = response.data;
     $scope.talents.forEach(function(elem) {
