@@ -22,6 +22,8 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.submitTalent = function() {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
+        console.log('submitTalent response:', response.data);
+
         // add a skills array to the result
         response.data.skills = [];
 
@@ -42,10 +44,10 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
         skillsToAdd.forEach(function(elem) {
           // $scope.talent.length -1 will be the ID of the last talent (just added)
           $http.post('/join/' + response.data.talent_id + '/' + elem)
-            .then(function(response) {
-
+            .then(function(newResponse) {
+              console.log('submitTalent skill response:', newResponse);
               // go add the result to the talent
-              response.data.skills.push(response.data);
+              response.data.skills.push(newResponse.data);
             });
         });
       });
