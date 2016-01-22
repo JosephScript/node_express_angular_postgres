@@ -70,6 +70,22 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
         // remove the element from the array
         $scope.skills.splice(index, 1);
       }
+
+      // now we have to remove it from each talent's list
+      $scope.talents.forEach(function(elem){
+       index = -1;
+        for(var j = 0; j < elem.skills.length; j++) {
+            if (elem.skills[j].skills_id === id) {
+                index = j;
+                break;
+            }
+        }
+        if (index > -1){
+          // remove the element from the array
+          elem.skills.splice(index, 1);
+          index = -1;
+        }
+      });
     });
   };
 
