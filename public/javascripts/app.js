@@ -37,29 +37,20 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
         // add a skills array to the result
         response.data.skills = [];
 
-        // push the response to the array
-        // Note:  Objects and arrays are pushed by reference
-        // so updating response.data updates $scope.talents last entry
-        $scope.talents.push(response.data);
-
-        // Copy the skills so we can add them async, and still clear the form ok
-        var skillsToAdd = angular.copy($scope.talentForm.skills);
-
         // clear the form
         $scope.talentForm = {
           skills: []
         };
 
-        // Now, go add the skills!
-        skillsToAdd.forEach(function(elem) {
-          // $scope.talent.length -1 will be the ID of the last talent (just added)
-          $http.post('/join/' + response.data.talent_id + '/' + elem)
-            .then(function(newResponse) {
-              console.log('submitTalent skill response:', newResponse);
-              // go add the result to the talent
-              response.data.skills.push(newResponse.data);
-            });
-        });
+        $http.get('/join/' + response.data.talent_id)
+          .then(function(response2) {
+            console.log('getting talent skills:', response2.data);
+            response.data.skills = response2.data;
+          });
+
+        // push the response to the array
+        $scope.talents.push(response.data);
+
       });
   };
 

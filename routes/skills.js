@@ -127,7 +127,6 @@ router.delete('/:skillId', function(req, res) {
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
-
     // Handle Errors
     if(err) {
       console.log(err);

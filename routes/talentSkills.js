@@ -2,7 +2,7 @@ var express = require('express');
 var router = express.Router();
 var pg = require('pg');
 var connectionString = process.env.DATABASE_URL ||
- 'postgres://localhost:5432/talent_db';
+'postgres://localhost:5432/talent_db';
 
 /**
 * Creates a new talent/skill lookup
@@ -18,30 +18,27 @@ router.post('/:talentId/:skillsId', function(req, res) {
 
     // SQL Query > Insert Data
     client.query('INSERT INTO talent_skills(talent_id, skills_id) ' +
-    'values($1, $2) RETURNING ', [req.params.talentId, req.params.skillsId],
-        function(err, result) {
-          // Handle Errors
-          if(err) {
-            console.log(err);
-          }
-          done();
+    'values($1, $2) RETURNING ', [req.params.talentId, req.params.skillsId], function(err, result) {
+      // Handle Errors
+      if(err) {
+        console.log(err);
+      }
+      done();
 
-          // SQL Query > Select Data
-          var query = client.query(
-            'SELECT * from skills where skills_id = $1 LIMIT 1;',
-          [req.params.skillsId]);
+      // SQL Query > Select Data
+      var query = client.query('SELECT * from skills where skills_id = $1 LIMIT 1;',
+      [req.params.skillsId]);
 
-          // Stream results back one row at a time
-          query.on('row', function(row) {
-            result = row;
-          });
-          // After all data is returned, close connection and return results
-          query.on('end', function() {
-            client.end();
-            return res.json(result);
-          });
-
-        });
+      // Stream results back one row at a time
+      query.on('row', function(row) {
+        result = row;
+      });
+      // After all data is returned, close connection and return results
+      query.on('end', function() {
+        client.end();
+        return res.json(result);
+      });
+    });
   });
 });
 
