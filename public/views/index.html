@@ -6,15 +6,41 @@
   <!--STYLES-->
   <link rel="stylesheet" href="/vendor/normalize.css">
   <link rel="stylesheet" href="/vendor/skeleton.css">
+  <link rel="stylesheet" href="/vendor/skeleton.css">
 
 </head>
 <body  ng-controller="mainCtrl">
   <div class="container">
+
     <div class="row">
       <div class="twelve columns">
         <h1>Welcome to the talent database!</h1>
       </div>
     </div>
+
+    <div class="row">
+      <table class="u-full-width">
+        <thead>
+          <tr>
+            <th>First Name</th>
+            <th>Last Name</th>
+            <th>Phone</th>
+            <th>Low Range</th>
+            <th>High Range</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="talent in talents">
+            <td>{{talent.first_name}}</td>
+            <td>{{talent.last_name}}</td>
+            <td>{{talent.phone}}</td>
+            <td>{{talent.high}}</td>
+            <td>{{talent.low}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
     <div class="row">
       <div class="six columns">
         <button ng-click="toggleTalentForm()">{{showTalentForm ? "Hide talent form" : "Add talent"}}</button>
@@ -34,37 +60,34 @@
           <label for="high">High Range:</label>
           <input type="number" id="high" name="high" ng-model="talentForm.high" />
 
-          <ul>
-            <li ng-repeat="skill in skills">
-              <label for="{{skill.skills_id}}">{{skill.name}} </label>
+            <div ng-repeat="skill in skills">
+              <label for="{{skill.skills_id}}">{{skill.name}}
               <input type="checkbox"
               id="{{skill.skills_id}}"
               checklist-model="talentForm.skills"
               checklist-value="skill.skills_id">
-            </li>
-          </ul>
+               </label>
+            </div>
+
           <button class="button button-primary">Submit</button>
         </form>
       </div>
       <div class="six columns">
         <button ng-click="toggleSkillForm()">{{showSkillForm ? "Hide skill form" : "Add skill"}}</button>
         <form ng-if="showSkillForm" ng-submit="submitSkill()">
+        <h2>Skills in the database:</h2>
+        <ul>
+          <li ng-repeat="skill in skills">
+            {{skill.name}}
+        </li>
+        </ul>
           <label for="name">Name:</label>
           <input class="u-full-width" type="text" id="name" name="name" ng-model="skillForm.name" />
           <button class="button button-primary">Submit</button>
         </form>
-        <ul>
-          <li ng-repeat="talent in talents">
-            {{talent.last_name}}, {{talent.first_name}}
-            <ul>
-              <li ng-repeat="skill in talent.skills">
-                <label>{{skill.name}} </label>
-              </li>
-            </ul>
-          </li>
-        </ul>
       </div>
     </div>
+  </div>
 
     <!--SCRIPTS-->
     <script type="text/javascript" src="/vendor/angular.min.js"></script>
