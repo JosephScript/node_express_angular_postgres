@@ -51,19 +51,19 @@
         <button ng-click="toggleTalentForm()">{{showTalentForm ? "Hide talent form" : "Add talent"}}</button>
         <form ng-if="showTalentForm" ng-submit="submitTalent()">
           <label for="firstname">First Name:</label>
-          <input class="u-full-width" type="text" id="firstname" name="firstname" ng-model="talentForm.firstname" />
+          <input class="u-full-width" type="text" id="firstname" name="firstname" ng-model="talentForm.firstname" required/>
 
           <label for="lastname">Last Name:</label>
-          <input class="u-full-width" type="text" id="lastname" name="lastname" ng-model="talentForm.lastname" />
+          <input class="u-full-width" type="text" id="lastname" name="lastname" ng-model="talentForm.lastname" required/>
 
           <label for="phone">Phone Number:</label>
-          <input class="u-full-width" type="text" id="phone" name="phone" ng-model="talentForm.phone" />
+          <input class="u-full-width" type="text" id="phone" name="phone" ng-model="talentForm.phone" required/>
 
           <label for="low">Low Range:</label>
-          <input type="number" id="low" name="low" ng-model="talentForm.low" />
+          <input type="number" id="low" name="low" ng-model="talentForm.low" min="0" max="2147483647" required/>
 
           <label for="high">High Range:</label>
-          <input type="number" id="high" name="high" ng-model="talentForm.high" />
+          <input type="number" id="high" name="high" ng-model="talentForm.high" min="0" max="2147483647" required/>
 
             <div ng-repeat="skill in skills">
               <label for="{{skill.skills_id}}">{{skill.name}}
@@ -87,7 +87,7 @@
         </li>
         </ul>
           <label for="name">Name:</label>
-          <input class="u-full-width" type="text" id="name" name="name" ng-model="skillForm.name" />
+          <input class="u-full-width" type="text" id="name" name="name" ng-model="skillForm.name" required/>
           <button type="submit" class="button button-primary">Submit</button>
         </form>
       </div>
