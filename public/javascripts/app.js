@@ -83,6 +83,25 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     });
   };
 
+  // deletes a talent
+  $scope.deleteTalent = function(id){
+    $http.delete('/talents/' + id).then(function(response){
+
+      // find the element in the skills array to remove it
+      var index = -1;
+      for(var i = 0; i < $scope.talents.length; i++) {
+          if ( $scope.talents[i].talent_id === id) {
+              index = i;
+              break;
+          }
+      }
+      if (index > -1){
+        // remove the element from the array
+        $scope.talents.splice(index, 1);
+      }
+    });
+  };
+
   // get repeater info
   $http.get('/skills').then(function(response) {
       $scope.skills = response.data;

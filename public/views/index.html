@@ -22,6 +22,7 @@
       <table class="u-full-width">
         <thead>
           <tr>
+            <th></th>
             <th>First Name</th>
             <th>Last Name</th>
             <th>Phone</th>
@@ -32,6 +33,7 @@
         </thead>
         <tbody>
           <tr ng-repeat="talent in talents">
+            <td><a href class="delete" ng-click="deleteTalent(talent.talent_id)">X</a></td>
             <td>{{talent.first_name}}</td>
             <td>{{talent.last_name}}</td>
             <td>{{talent.phone}}</td>

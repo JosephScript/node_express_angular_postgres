@@ -139,7 +139,7 @@ router.delete('/:talentId', function(req, res) {
 
     // SQL Query > Delete Data
     client.query('DELETE FROM talent_skills WHERE talent_id=($1)', [id]);
-    client.query('DELETE FROM talent WHERE id=($1)', [id]);
+    client.query('DELETE FROM talent WHERE talent_id=($1)', [id]);
 
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM talent ORDER BY talent_id ASC');
