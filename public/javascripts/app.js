@@ -11,7 +11,7 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
   $scope.skills = [];
   $scope.talents = [];
 
-// hide/show forms
+  // hide/show forms
   $scope.toggleTalentForm = function() {
     $scope.showTalentForm = !$scope.showTalentForm;
   };
@@ -64,12 +64,29 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
       });
   };
 
+  // deletes a skill
+  $scope.deleteSkill = function(id){
+    $http.delete('/skills/' + id).then(function(response){
+
+      // find the element in the skills array to remove it
+      var index = -1;
+      for(var i = 0; i < $scope.skills.length; i++) {
+          if ( $scope.skills[i].skills_id === id) {
+              index = i;
+              break;
+          }
+      }
+      if (index > -1){
+        // remove the element from the array
+        $scope.skills.splice(index, 1);
+      }
+    });
+  };
+
   // get repeater info
   $http.get('/skills').then(function(response) {
       $scope.skills = response.data;
     });
-
-    // get repeater info
   $http.get('/talents').then(function(response) {
     $scope.talents = response.data;
     $scope.talents.forEach(function(elem) {

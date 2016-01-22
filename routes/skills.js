@@ -134,6 +134,7 @@ router.delete('/:skillId', function(req, res) {
     }
 
     // SQL Query > Delete Data
+    client.query('DELETE FROM talent_skills WHERE skills_id=($1)', [id]);
     client.query('DELETE FROM skills WHERE skills_id=($1)', [id]);
 
     // SQL Query > Select Data
