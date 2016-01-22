@@ -22,9 +22,11 @@ app.controller('mainCtrl', ['$scope', '$http', function($scope, $http) {
     $http.post('/talents', $scope.talentForm)
       .then(function(response) {
         $scope.talents = response.data;
+
         // go get all their talents (except last one)
+        var lastIndex = $scope.talents.length - 1;
         $scope.talents.forEach(function(elem) {
-          if (elem.talent_id !== $scope.talents[$scope.talents.length - 1].talent_id) {
+          if (elem.talent_id !== $scope.talents[lastIndex].talent_id) {
             $http.get('/join/' + elem.talent_id)
               .then(function(response) {
                 elem.skills = response.data;

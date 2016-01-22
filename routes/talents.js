@@ -4,6 +4,9 @@ var pg = require('pg');
 var connectionString = process.env.DATABASE_URL ||
  'postgres://localhost:5432/talent_db';
 
+/**
+* Creates a new talent, and returns all talents
+*/
 router.post('/', function(req, res) {
   var results = [];
 
@@ -20,7 +23,8 @@ router.post('/', function(req, res) {
   pg.connect(connectionString, function(err, client, done) {
 
     // SQL Query > Insert Data
-    client.query('INSERT INTO talent(first_name, last_name, phone, low_range, high_range) ' +
+    client.query('INSERT INTO talent' +
+    '(first_name, last_name, phone, low_range, high_range) ' +
     'values($1, $2, $3, $4, $5) returning talent_id',
     [data.firstname, data.lastname, data.phone, data.low, data.high],
     function(err, result) {
@@ -50,12 +54,19 @@ router.post('/', function(req, res) {
   });
 });
 
+/**
+* Gets all talent
+*/
 router.get('/', function(req, res) {
   var results = [];
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
 
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM talent ORDER BY talent_id ASC;');
 
@@ -70,15 +81,13 @@ router.get('/', function(req, res) {
       return res.json(results);
     });
 
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });
 
+/**
+* Updates a talent
+*/
 router.put('/:talentId', function(req, res) {
 
   var results = [];
@@ -91,6 +100,11 @@ router.put('/:talentId', function(req, res) {
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Update Data
     client.query('UPDATE talent SET firstname=($1) WHERE talent_id=($2)',
@@ -109,16 +123,13 @@ router.put('/:talentId', function(req, res) {
       client.end();
       return res.json(results);
     });
-
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });
 
+/**
+* Deletes a talent
+*/
 router.delete('/:talentId', function(req, res) {
 
   var results = [];
@@ -128,6 +139,11 @@ router.delete('/:talentId', function(req, res) {
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Delete Data
     client.query('DELETE FROM talent WHERE id=($1)',
@@ -146,12 +162,6 @@ router.delete('/:talentId', function(req, res) {
       client.end();
       return res.json(results);
     });
-
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });

@@ -4,6 +4,9 @@ var pg = require('pg');
 var connectionString = process.env.DATABASE_URL ||
  'postgres://localhost:5432/talent_db';
 
+/**
+* Creates a new skill, and returns all skills
+*/
 router.post('/', function(req, res) {
   var results = [];
 
@@ -14,6 +17,11 @@ router.post('/', function(req, res) {
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Insert Data
     client.query('INSERT INTO skills(name) values($1)', [data.name]);
@@ -32,19 +40,21 @@ router.post('/', function(req, res) {
       return res.json(results);
     });
 
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 });
 
+/**
+* Gets all skills
+*/
 router.get('/', function(req, res) {
   var results = [];
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM skills ORDER BY skills_id ASC;');
@@ -60,15 +70,12 @@ router.get('/', function(req, res) {
       return res.json(results);
     });
 
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });
-
+/**
+* Updates a skill
+*/
 router.put('/:skillId', function(req, res) {
 
   var results = [];
@@ -82,8 +89,14 @@ router.put('/:skillId', function(req, res) {
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
 
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
+
     // SQL Query > Update Data
-    client.query('UPDATE skills SET name=($1) WHERE skills_id=($2)', [data.name, id]);
+    client.query('UPDATE skills SET name=($1) WHERE skills_id=($2)',
+      [data.name, id]);
 
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM skills ORDER BY skills_id ASC');
@@ -98,16 +111,13 @@ router.put('/:skillId', function(req, res) {
       client.end();
       return res.json(results);
     });
-
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });
 
+/**
+* Deletes a skill
+*/
 router.delete('/:skillId', function(req, res) {
 
   var results = [];
@@ -117,6 +127,11 @@ router.delete('/:skillId', function(req, res) {
 
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Delete Data
     client.query('DELETE FROM skills WHERE skills_id=($1)', [id]);
@@ -134,12 +149,6 @@ router.delete('/:skillId', function(req, res) {
       client.end();
       return res.json(results);
     });
-
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
-
   });
 
 });

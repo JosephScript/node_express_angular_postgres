@@ -10,11 +10,15 @@ grunt.initConfig({
           cwd: 'node_modules/angular/',
           src: ['angular.min.js'],
           dest: 'public/vendor/'
-        },
-        {
+        }, {
           expand: true,
           cwd: 'node_modules/checklist-model/',
           src: ['checklist-model.js'],
+          dest: 'public/vendor/'
+        }, {
+          expand: true,
+          cwd: 'node_modules/skeleton-css/css',
+          src: ['normalize.css', 'skeleton.css'],
           dest: 'public/vendor/'
         }
       ],

@@ -4,10 +4,17 @@ var pg = require('pg');
 var connectionString = process.env.DATABASE_URL ||
  'postgres://localhost:5432/talent_db';
 
+/**
+* Creates a new talent/skill lookup
+*/
 router.post('/:talentId/:skillsId', function(req, res) {
   var results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Insert Data
     client.query('INSERT INTO talent_skills(talent_id, skills_id) ' +
@@ -15,10 +22,6 @@ router.post('/:talentId/:skillsId', function(req, res) {
         function(err, result) {
 
           done();
-          // Handle Errors
-          if(err) {
-            console.log(err);
-          }
 
           // SQL Query > Select Data
           var query = client.query(
@@ -39,10 +42,18 @@ router.post('/:talentId/:skillsId', function(req, res) {
   });
 });
 
+/**
+* Gets all the skills for a particular talent
+*/
 router.get('/:talentId', function(req, res) {
   var results = [];
   // Get a Postgres client from the connection pool
   pg.connect(connectionString, function(err, client, done) {
+
+    // Handle Errors
+    if(err) {
+      console.log(err);
+    }
 
     // SQL Query > Select Data
     var query = client.query('SELECT * FROM skills ' +
@@ -60,11 +71,6 @@ router.get('/:talentId', function(req, res) {
       client.end();
       return res.json(results);
     });
-
-    // Handle Errors
-    if(err) {
-      console.log(err);
-    }
   });
 });
 
