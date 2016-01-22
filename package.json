@@ -13,12 +13,14 @@
   },
   "keywords": [
     "express",
+    "expressjs",
     "postgres",
+    "postgresql",
     "node",
     "nodejs",
-    "expressjs",
     "sql",
-    "postgresql"
+    "angular",
+    "angularjs"
   ],
   "author": "Joseph Szczesniak",
   "license": "MIT",
